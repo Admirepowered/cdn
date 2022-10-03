@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Ling Macker" />
+<meta name="description" content="PanDownload网页版,百度网盘分享链接在线解析工具" />
+<meta name="keywords" content="PanDownload,百度网盘,分享链接,下载,不限速,HvGLuQ.jpg" />
+<link rel="icon" href="https://pandownload.com/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.2/css/bootstrap.min.css">
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/dplayer/1.26.0/DPlayer.min.js"></script>
+<style>
+  body {
+    background-image: url("https://cdn.jsdelivr.net/gh/uxiaohan/GitImgTypecho/Acg/api.vvhan.com[0].jpg");
+  }
+
+  .logo-img {
+    width: 1.1em;
+    position: relative;
+    top: -3px;
+  }
+  #video{
+	max-width: 100%;
+  }
+</style>
+<meta name="referrer" content="never">
+<title>视频预览</title>
+<style>
+    .alert {
+      position: relative;
+      top: 3em;
+    }
+	.dplayer-logo {
+		pointer-events: none;
+		position: absolute;
+		left:auto;
+		right: 10px;
+		top: 10px;
+		max-width: 30px;
+		max-height: 30px;
+	}
+    .alert-heading {
+      height: 0.8em;
+    }
+  </style>
+<script>$(function(){
+	  var search = this.location.search;
+	  if (search.indexOf('dlink=')!=-1)
+	  {
+		var dlink = decodeURIComponent(atob(search.substring(7)));
+		
+	  }else{
+	  
+	  var md5 = search.substring(5,37)
+	  var next = search.substring(38)
+	  var tt=next.indexOf('&')
+	  var size  =next.substr(5,tt-5)
+	  var acc=  next.substring(tt+5)
+	  var jdata=""
+	  var res=fetch(acc, {
+      method: 'post',
+      body: JSON.stringify({
+        md5: md5,
+        size: size
+      }) // 请求参数，JSON.stringify() JS 数据对象转换为 JSON 字符串
+   
+    }).then((res) => {return res.json(); })
+      .then((data) => {
+	  //alert(JSON.stringify(data));
+	  jdata=data;
+	  //this.setState({selV:JSON.stringify(data)});
+	  const dp = new DPlayer({
+        container: document.getElementById('dplayer'),
+        video: {
+            url: jdata.data.urls[0].url,
+       },
+		logo: 'https://pandownload.com/img/baiduwp/logo.png',
+		})
+		return ;
+	  
+	  }) 
+	  
+	  //var dlink = jdata.data.urls[0].url;
+	  
+	  
+	  
+	  }
+      const dp = new DPlayer({
+        container: document.getElementById('dplayer'),
+        video: {
+            url: dlink,
+       },
+    logo: 'https://pandownload.com/img/baiduwp/logo.png',
+    })
+    })</script>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<div class="container">
+<a class="navbar-brand" href="'">
+<img src="https://pandownload.com/img/baiduwp/logo.png" class="img-fluid rounded logo-img mr-2" alt="LOGO">PanDownload
+</a>
+<button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#collpase-bar">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="collpase-bar">
+<ul class="navbar-nav">
+
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://github.com/TkzcM/baiduwp" target="_blank">GitHub</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<div class="container-fluid" id="video">
+<div class="row justify-content-center">
+<div class="col-md-7 col-sm-8 col-11">
+<div class="alert alert-primary" role="alert">
+<h5 class="alert-heading">视频预览 with ❤ DPlayer</h5>
+<hr>
+<p class="card-text">
+<br><div id="dplayer"></div></p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
